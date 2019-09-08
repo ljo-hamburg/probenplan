@@ -1,0 +1,107 @@
+.header img {
+    width: 240px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header > div {
+    width: calc(100% - 250px);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header h1 {
+    font-weight: bold;
+    margin-bottom: 0 !important;
+}
+
+.header div div {
+    margin-top: -3.5pt;
+}
+
+hr {
+    margin-top: 0;
+}
+
+.event-title {
+    font-weight: bold;
+    margin-bottom: -5px;
+}
+
+.event-location {
+    font-weight: normal;
+    color: gray;
+}
+
+.secondary .event-title, .secondary .event-location, .secondary .event-date {
+    color: #8a8a8a;
+}
+
+tr > th:first-child {
+    text-align: right;
+    white-space: nowrap;
+}
+
+th, td {
+    border-bottom: none;
+}
+
+tr th, tr.line td {
+    border-top: 0.1rem solid #e1e1e1;
+}
+
+thead tr th {
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+ul, li {
+    margin-bottom: 0 !important;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    display: table-header-group !important;
+    background-color: lightgray;
+    -webkit-print-color-adjust: exact;
+}
+
+@media screen {
+    body {
+        padding: 20px;
+    }
+}
+
+@media print {
+    * {
+        color: black;
+    }
+
+    .secondary .event-title, .secondary .event-location, .secondary .event-date i {
+        color: gray;
+        -webkit-print-color-adjust: exact;
+    }
+
+    #date-selector {
+        display: none;
+    }
+
+    :not(h1) {
+        font-size: 95% !important;
+    }
+
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    th div, td div {
+        page-break-inside: avoid;
+    }
+}
+
+td, th {
+    padding: 0.2rem 1rem !important;
+}

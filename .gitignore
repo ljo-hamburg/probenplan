@@ -75,6 +75,3 @@ webpack-stats.json
 # Static Artwork Files
 media/
 venv/
-virtualEnv/
-**/static/*
-karaoke_media/
