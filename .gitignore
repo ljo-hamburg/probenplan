@@ -75,3 +75,4 @@ webpack-stats.json
 # Static Artwork Files
 media/
 venv/
+/static

@@ -1,4 +1,5 @@
 {% load static %}
+{% load sass_tags %}
 {% load tz %}
 
 <!DOCTYPE html>
@@ -8,12 +9,12 @@
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
-  <link rel="stylesheet" href="{% static 'core/custom.css' %}">
+  <link href="{% sass_src 'core/custom.scss' %}" rel="stylesheet" type="text/css"/>
   <title>Probenplan des LJO Hamburg (Stand {% now "j.n.Y" %})</title>
 </head>
 <body>
 <header class="header">
-  <div>
+  <div class="title">
     <h1>Probenplan des LJO Hamburg</h1>
     <div>Stand vom {% now "j.n.Y" %}</div>
   </div>
@@ -23,27 +24,32 @@
 <table class="table">
   <thead>
   <tr>
-    <th id="date-heading" scope="col">
+    <th class="date-cell" scope="col">
       <div>Datum</div>
     </th>
-    <th id="time-heading" scope="col">
+    <th class="time-cell" scope="col">
       <div>Uhrzeit</div>
     </th>
-    <th id="name-heading" scope="col">
-      <div>Probe</div>
+    <th class="event-cell" scope="col">
+      <div>Titel/Ort</div>
     </th>
-    <th id="description-heading" scope="col">
+    <th class="description-cell" scope="col">
       <div>Anmerkungen</div>
     </th>
   </tr>
   </thead>
   <tbody>
   {% for day_events in events %}
+    {% ifchanged %}
+      <tr class="year-row">
+        <th colspan="4"><h4>Termine in {{ day_events.day|date:'Y' }}</h4></th>
+      </tr>
+    {% endifchanged %}
     {% for event in day_events.events %}
       {% if forloop.first %}
         <tr class="line {% if event.all_day and day_events.has_timed_events %}secondary{% endif %}">
-          <th rowspan="{{ day_events.events|length }}" scope="row">
-            <div>
+          <th rowspan="{{ day_events.events|length }}" scope="row" class="date-cell">
+            <div class="event-date">
               {{ day_events.day|date:'j. M Y' }}
             </div>
           </th>
@@ -51,24 +57,24 @@
         <tr class="{% if event.all_day and day_events.has_timed_events %}secondary{% endif %}">
       {% endif %}
     {% if event.all_day %}
-      <td class="date-cell">
-        <div class="event-date"><i>ganztägig</i></div>
+      <td class="time-cell">
+        <div class="event-time"><i>ganztägig</i></div>
       </td>
     {% else %}
-      <td class="date-cell">
-        <div class="event-date">{{ event.begin|time:'H:i' }} – {{ event.end|date:'H:i' }}</div>
+      <td class="time-cell">
+        <div class="event-time">{{ event.begin|time:'H:i' }} – {{ event.end|date:'H:i' }}</div>
       </td>
     {% endif %}
-    <td valign="middle">
+    <td valign="middle" class="event-cell">
       <div class="event">
-        <div class="event-title">{{ event.title }}</div>
-        <small class="event-location">
-          {{ event.location }}
+        <div class="title">{{ event.title }}</div>
+        <small class="location">
+          {{ event.location|safe }}
         </small>
       </div>
     </td>
-    <td>
-      <div>{{ event.description|safe }}</div>
+    <td class="description-cell">
+      <div class="event-description">{{ event.description|safe }}</div>
     </td>
     </tr>
     {% endfor %}

@@ -1,8 +1,10 @@
 import datetime
 import os
+import re
 
 import arrow
 from django.shortcuts import render
+from django.utils import html
 from ics import Calendar
 from urllib.request import urlopen
 
@@ -47,7 +49,7 @@ def probenplan(request):
                 continue
             my_event = Event()
             my_event.title = event.name
-            my_event.location = event.location
+            my_event.location = clean_location(event.location)
             my_event.description = event.description
             my_event.begin = event.begin.to(settings.TIME_ZONE)
             my_event.end = event.end.to(settings.TIME_ZONE)
@@ -61,3 +63,21 @@ def probenplan(request):
         'today': arrow.now(tz=settings.TIME_ZONE),
         'events': events
     })
+
+
+def clean_location(location):
+    # (.*) (Name of the Location)
+    # ,    (Comma)
+    # .*   (Street Name)
+    #      (Space)
+    # \d*  (House Number)
+    # ,    (Comma)
+    # \d+  (Postal Code)
+    #      (Space)
+    # \w*   (Town)
+    if not location:
+        return location
+    components = location.split(",")
+    components = [html.escape(string.strip()) for string in components]
+    components[0] = "<strong>" + components[0] + "</strong>"
+    return components[0] + "<br />" + ", ".join(components[1:])

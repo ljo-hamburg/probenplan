@@ -5,7 +5,7 @@ WORKDIR /code
 COPY . /code/
 RUN pip install -r requirements.txt
 RUN python manage.py migrate
-RUN mkdir static && python manage.py collectstatic
+RUN mkdir static && python manage.py compilescss && python manage.py collectstatic --ignore=*.scss
 
 ENV PYTHONUNBUFFERED 1
 ENV PROBENPLAN_CALENDAR "none"
