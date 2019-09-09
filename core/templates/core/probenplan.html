@@ -26,11 +26,11 @@
     <th id="date-heading" scope="col">
       <div>Datum</div>
     </th>
-    <th id="name-heading" scope="col">
-      <div>Probe</div>
-    </th>
     <th id="time-heading" scope="col">
       <div>Uhrzeit</div>
+    </th>
+    <th id="name-heading" scope="col">
+      <div>Probe</div>
     </th>
     <th id="description-heading" scope="col">
       <div>Anmerkungen</div>
@@ -50,6 +50,15 @@
           {% else %}
         <tr class="{% if event.all_day and day_events.has_timed_events %}secondary{% endif %}">
       {% endif %}
+    {% if event.all_day %}
+      <td class="date-cell">
+        <div class="event-date"><i>ganztägig</i></div>
+      </td>
+    {% else %}
+      <td class="date-cell">
+        <div class="event-date">{{ event.begin|time:'H:i' }} – {{ event.end|date:'H:i' }}</div>
+      </td>
+    {% endif %}
     <td valign="middle">
       <div class="event">
         <div class="event-title">{{ event.title }}</div>
@@ -58,15 +67,6 @@
         </small>
       </div>
     </td>
-    {% if event.all_day %}
-      <td>
-        <div class="event-date"><i>ganztägig</i></div>
-      </td>
-    {% else %}
-      <td>
-        <div>{{ event.begin|time:'H:i' }} – {{ event.end|date:'H:i' }}</div>
-      </td>
-    {% endif %}
     <td>
       <div>{{ event.description|safe }}</div>
     </td>

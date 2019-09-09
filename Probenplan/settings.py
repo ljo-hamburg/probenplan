@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dz491yzqgwpdaei!053hq$)%a(u25aq#l6eg6hcvjwbli*$f96'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['probenplan.webserver.ljo-hamburg.de']
+ALLOWED_HOSTS = ['probenplan.webserver.ljo-hamburg.de', 'probenplan.ljo-hamburg.de', '127.0.0.1']
 
 
 # Application definition
