@@ -39,11 +39,12 @@ def probenplan(request):
     for event in timeline:
         for date in arrow.Arrow.range('day', event.begin, event.end):
             days.add(date.floor('day'))
-    print(sorted(days))
     for day in sorted(days):
 
         my_day_events = []
         for event in calendar.timeline.on(day):
+            if event.end == day:
+                continue
             my_event = Event()
             my_event.title = event.name
             my_event.location = event.location

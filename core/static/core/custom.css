@@ -37,6 +37,11 @@ hr {
     color: #8a8a8a;
 }
 
+.event-date, #time-heading {
+    text-align: right;
+    white-space: nowrap;
+}
+
 tr > th:first-child {
     text-align: right;
     white-space: nowrap;
@@ -99,6 +104,10 @@ thead {
 
     th div, td div {
         page-break-inside: avoid;
+    }
+
+    .date-cell, #time-heading {
+        padding-right: 0 !important;
     }
 }
 

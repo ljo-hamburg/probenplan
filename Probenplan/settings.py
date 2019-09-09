@@ -25,7 +25,7 @@ SECRET_KEY = 'dz491yzqgwpdaei!053hq$)%a(u25aq#l6eg6hcvjwbli*$f96'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['probenplan.ljo-hamburg.de', 'probenplan.webserver.ljo-hamburg.de']
+ALLOWED_HOSTS = ['probenplan.webserver.ljo-hamburg.de', 'probenplan.ljo-hamburg.de', '127.0.0.1']
 
 
 # Application definition
