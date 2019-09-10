@@ -64,11 +64,11 @@ thead {
 tr {
   page-break-before: avoid;
 
-  &.secondary td {
-    color: #8a8a8a;
-    -webkit-print-color-adjust: exact;
-    @media print {
-      color: gray;
+  &.line {
+    page-break-before: auto;
+
+    th, td {
+      border-top: 0.1rem solid #e1e1e1;
     }
   }
 
@@ -82,11 +82,17 @@ tr {
     }
   }
 
-  &.line {
-    page-break-before: auto;
+  &.secondary td {
+    color: #8a8a8a;
+    -webkit-print-color-adjust: exact;
+    @media print {
+      color: gray;
+    }
+  }
 
-    th, td {
-      border-top: 0.1rem solid #e1e1e1;
+  &.vorstandssitzung, &.vollversammlung {
+    .title {
+      color: darken(darksalmon, 35%);
     }
   }
 }
