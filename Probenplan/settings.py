@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+X_FRAME_OPTIONS = "allow-from https://ljo-hamburg.de/"
 
 ROOT_URLCONF = 'Probenplan.urls'
 

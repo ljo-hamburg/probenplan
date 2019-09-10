@@ -3,9 +3,12 @@ FROM python:3-alpine
 RUN mkdir /code
 WORKDIR /code
 COPY . /code/
-RUN pip install -r requirements.txt
-RUN python manage.py migrate
-RUN mkdir static && python manage.py compilescss && python manage.py collectstatic --ignore=*.scss
+RUN apk add build-base \
+    && pip install -r requirements.txt \
+    && mkdir static \
+    && python manage.py migrate \
+    && python manage.py compilescss \
+    && python manage.py collectstatic
 
 ENV PYTHONUNBUFFERED 1
 ENV PROBENPLAN_CALENDAR "none"
