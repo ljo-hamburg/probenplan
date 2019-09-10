@@ -1,5 +1,8 @@
 FROM python:3-alpine
 
+ENV PYTHONUNBUFFERED 1
+ARG PROBENPLAN_CALENDAR=none
+
 RUN mkdir /code
 WORKDIR /code
 COPY . /code/
@@ -9,9 +12,6 @@ RUN apk add build-base \
     && python manage.py migrate \
     && python manage.py compilescss \
     && python manage.py collectstatic
-
-ENV PYTHONUNBUFFERED 1
-ENV PROBENPLAN_CALENDAR "none"
 
 EXPOSE 8000
 

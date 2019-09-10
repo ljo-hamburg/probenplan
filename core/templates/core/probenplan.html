@@ -50,7 +50,7 @@
         <tr class="line {% if event.all_day and day_events.has_timed_events %}secondary{% endif %}">
           <th rowspan="{{ day_events.events|length }}" scope="row" class="date-cell">
             <div class="event-date">
-              {{ day_events.day|date:'j. M Y' }}
+              {{ day_events.day|date:'j. M' }}
             </div>
           </th>
           {% else %}
