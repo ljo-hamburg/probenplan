@@ -5,6 +5,7 @@ import re
 import arrow
 from django.shortcuts import render
 from django.utils import html
+from django.views.decorators.clickjacking import xframe_options_exempt
 from ics import Calendar
 from urllib.request import urlopen
 
@@ -32,6 +33,7 @@ class DayEvents:
         return False
 
 
+@xframe_options_exempt
 def probenplan(request):
     url = os.getenv('PROBENPLAN_CALENDAR')
     calendar = Calendar(urlopen(url).read().decode())
@@ -66,18 +68,9 @@ def probenplan(request):
 
 
 def clean_location(location):
-    # (.*) (Name of the Location)
-    # ,    (Comma)
-    # .*   (Street Name)
-    #      (Space)
-    # \d*  (House Number)
-    # ,    (Comma)
-    # \d+  (Postal Code)
-    #      (Space)
-    # \w*   (Town)
     if not location:
         return location
-    components = location.split(",")
+    components = re.split('[,\n]', location)
     components = [html.escape(string.strip()) for string in components]
     components[0] = "<strong>" + components[0] + "</strong>"
     return components[0] + "<br />" + ", ".join(components[1:])
