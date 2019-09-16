@@ -46,41 +46,35 @@
       </tr>
     {% endifchanged %}
     {% for event in day_events.events %}
-      {% if forloop.first %}
-        <tr class="line {% if event.all_day and day_events.has_timed_events %}secondary{% endif %}
-                        {% if event.title == 'Vorstandssitzung' %}vorstandssitzung{% endif %}
-                        {% if event.title == 'Vollversammlung' %}vollversammlung{% endif %}">
+      <tr class="{% if forloop.first %}line {% endif %}{{ event.css_classes|join:' ' }}">
+        {% if forloop.first %}
           <th rowspan="{{ day_events.events|length }}" scope="row" class="date-cell">
             <div class="event-date">
               {{ day_events.day|date:'j. M' }}
             </div>
           </th>
-          {% else %}
-        <tr class="{% if event.all_day and day_events.has_timed_events %}secondary{% endif %}
-                   {% if event.title == 'Vorstandssitzung' %}vorstandssitzung{% endif %}
-                   {% if event.title == 'Vollversammlung' %}vollversammlung{% endif %}">
-      {% endif %}
-    {% if event.all_day %}
-      <td class="time-cell">
-        <div class="event-time"><i>ganztägig</i></div>
-      </td>
-    {% else %}
-      <td class="time-cell">
-        <div class="event-time">{{ event.begin|time:'H:i' }} – {{ event.end|date:'H:i' }}</div>
-      </td>
-    {% endif %}
-    <td valign="middle" class="event-cell">
-      <div class="event">
-        <div class="title">{{ event.title }}</div>
-        <small class="location">
-          {{ event.location|safe }}
-        </small>
-      </div>
-    </td>
-    <td class="description-cell">
-      <div class="event-description">{{ event.description|safe }}</div>
-    </td>
-    </tr>
+        {% endif %}
+        {% if event.all_day %}
+          <td class="time-cell">
+            <div class="event-time"><i>ganztägig</i></div>
+          </td>
+        {% else %}
+          <td class="time-cell">
+            <div class="event-time">{{ event.begin|time:'H:i' }} – {{ event.end|date:'H:i' }}</div>
+          </td>
+        {% endif %}
+        <td valign="middle" class="event-cell">
+          <div class="event">
+            <div class="title">{{ event.title }}</div>
+            <small class="location">
+              {{ event.location|safe }}
+            </small>
+          </div>
+        </td>
+        <td class="description-cell">
+          <div class="event-description">{{ event.description|safe }}</div>
+        </td>
+      </tr>
     {% endfor %}
   {% endfor %}
   </tbody>

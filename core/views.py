@@ -20,6 +20,17 @@ class Event:
     description: str
     all_day: bool
 
+    @property
+    def css_classes(self):
+        classes = []
+        if self.title == "Vorstandssitzung":
+            classes.append('vorstandssitzung')
+        if self.title == "Vollversammlung":
+            classes.append('vollversammlung')
+        if self.title.startswith('Neu:'):
+            classes.append('new')
+        return classes
+
 
 class DayEvents:
     day: arrow

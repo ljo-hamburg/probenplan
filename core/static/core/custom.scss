@@ -95,6 +95,12 @@ tr {
       color: darken(darksalmon, 35%);
     }
   }
+
+  &.new {
+    .title {
+      color: deepskyblue;
+    }
+  }
 }
 
 .year-row h4 {
