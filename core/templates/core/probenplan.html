@@ -20,6 +20,21 @@
   </div>
   <img src="https://ljo-hamburg.de/wp-content/uploads/2019/06/ljo-logo-png.png" alt="LJO-Logo" width="240">
 </header>
+<section class="control">
+  <form method="get" action="{% url 'probenplan' %}">
+    <input class="button" type="submit" value="Filter anwenden">
+    <input type="checkbox" id="all" name="all" {% if all_events %}checked{% endif %}>
+    <label class="label-inline" for="all">Vergangene Termine Zeigen</label>
+    <input type="checkbox" id="bw" name="bw" {% if black_and_white %}checked{% endif %}>
+    <label class="label-inline" for="bw">Keine Farben anzeigen</label>
+    {% if all_events %}
+    {% elif from_date or to_date %}
+      <span class="fill"></span>
+      <span>Zeige Termine{% if from_date %} ab dem {{ from_date|date:'j.m.Y' }}{% endif %}{% if to_date %} bis zum
+        {{ to_date|date:'j.m.Y' }}{% endif %}</span>
+    {% endif %}
+  </form>
+</section>
 <hr/>
 <table class="table">
   <thead>
@@ -46,7 +61,7 @@
       </tr>
     {% endifchanged %}
     {% for event in day_events.events %}
-      <tr class="{% if forloop.first %}line {% endif %}{{ event.css_classes|join:' ' }}">
+      <tr class="{% if forloop.first %}line {% endif %}{{ event.css_classes|join:' ' }}{% if black_and_white %} bw{% endif %}">
         {% if forloop.first %}
           <th rowspan="{{ day_events.events|length }}" scope="row" class="date-cell">
             <div class="event-date">
