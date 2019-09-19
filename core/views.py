@@ -1,38 +1,17 @@
-import datetime
 import os
-import re
-
-import arrow
-from django.shortcuts import render
-from django.utils import html
-from django.views.decorators.clickjacking import xframe_options_exempt
-from ics import Calendar
 from urllib.request import urlopen
 
+import arrow
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.clickjacking import xframe_options_exempt
+from ics import Calendar
+
 from Probenplan import settings
+from core.models import Event
 
 
-class Event:
-    begin: arrow
-    end: arrow
-    title: str
-    location: str
-    description: str
-    all_day: bool
-
-    @property
-    def css_classes(self):
-        classes = []
-        if self.title == "Vorstandssitzung":
-            classes.append('vorstandssitzung')
-        if self.title == "Vollversammlung":
-            classes.append('vollversammlung')
-        if self.title.startswith('Neu:'):
-            classes.append('new')
-        return classes
-
-
-class DayEvents:
+class EventList:
     day: arrow
     events: list
 
@@ -44,70 +23,62 @@ class DayEvents:
         return False
 
 
+# TODO: Auto Reload Mechanism
 @xframe_options_exempt
-def probenplan(request):
+def reload(request):
+    url = os.getenv('PROBENPLAN_CALENDAR')
+    calendar = Calendar(urlopen(url).read().decode())
+    Event.objects.all().delete()
+    events = []
+    for entry in calendar.timeline:
+        event = Event()
+        event.title = entry.name
+        event.location = entry.location
+        event.description = entry.description
+        event.begin = entry.begin.to(settings.TIME_ZONE).datetime
+        event.end = entry.end.to(settings.TIME_ZONE).datetime
+        event.all_day = entry.all_day
+        events.append(event)
+    Event.objects.bulk_create(events)
+    return redirect('/')
+
+
+@xframe_options_exempt
+def index(request):
     all_events = request.GET.get('all', 'false').lower() in ['true', '1', 'yes', 'on']
     black_and_white = request.GET.get('bw', 'false').lower() in ['true', '1', 'yes', 'on']
     from_date = request.GET.get('from', None)
     to_date = request.GET.get('to', None)
 
-    if from_date:
-        from_date = arrow.get(from_date)
-    if to_date:
-        to_date = arrow.get(to_date)
+    events = Event.objects.all()
+    if not all_events and from_date:
+        events = events.filter(begin__gte=arrow.get(from_date).datetime)
+    elif not all_events and not from_date:
+        events = events.filter(begin__gte=arrow.now().datetime)
+    if not all_events and to_date:
+        events = events.filter(end__lte=arrow.get(to_date).datetime)
 
-    url = os.getenv('PROBENPLAN_CALENDAR')
-    calendar = Calendar(urlopen(url).read().decode())
-    events = []
-    for day in get_relevant_days(request, calendar, from_date, to_date):
-        my_day_events = []
-        for event in calendar.timeline.on(day):
-            if event.end == day:
+    day_events = {}
+    for event in events:
+        for date in arrow.Arrow.range('day', event.begin, event.end):
+            floored = date.floor('day')
+            if date == event.end:
                 continue
-            my_event = Event()
-            my_event.title = event.name
-            my_event.location = clean_location(event.location)
-            my_event.description = event.description
-            my_event.begin = event.begin.to(settings.TIME_ZONE)
-            my_event.end = event.end.to(settings.TIME_ZONE)
-            my_event.all_day = event.all_day
-            my_day_events.append(my_event)
-        day_events = DayEvents()
-        day_events.day = day
-        day_events.events = sorted(my_day_events, key=lambda e: (not e.all_day, e.begin))
-        events.append(day_events)
+            if floored not in day_events:
+                day_events[floored] = set()
+            day_events[floored].add(event)
+    event_lists = []
+    for (day, events) in day_events.items():
+        event_list = EventList()
+        event_list.day = day
+        event_list.events = sorted(events, key=lambda e: (not e.all_day, e.begin))
+        event_lists.append(event_list)
+    event_lists = sorted(event_lists, key=lambda l: l.day)
     return render(request, 'core/probenplan.html', {
-        'from_date': from_date,
-        'to_date': to_date,
+        'from_date': arrow.get(from_date) if from_date else None,
+        'to_date': arrow.get(to_date) if to_date else None,
         'black_and_white': black_and_white,
         'all_events': all_events,
         'today': arrow.now(tz=settings.TIME_ZONE),
-        'events': events
+        'events': event_lists
     })
-
-
-def get_relevant_days(request, calendar, from_date, to_date):
-    all_events = request.GET.get('all', 'false').lower() in ['true', '1', 'yes', 'on']
-
-    days = set()
-    if all_events:
-        timeline = calendar.timeline
-    elif from_date:
-        timeline = calendar.timeline.start_after(from_date)
-    else:
-        timeline = calendar.timeline.start_after(arrow.now(tz=settings.TIME_ZONE))
-    for event in timeline:
-        if to_date and event.begin > to_date.ceil('day'):
-            break
-        for date in arrow.Arrow.range('day', event.begin, event.end):
-            days.add(date.floor('day'))
-    return sorted(days)
-
-
-def clean_location(location):
-    if not location:
-        return location
-    components = re.split('[,\n]', location)
-    components = [html.escape(string.strip()) for string in components]
-    components[0] = "<strong>" + components[0] + "</strong>"
-    return components[0] + "<br />" + ", ".join(components[1:])

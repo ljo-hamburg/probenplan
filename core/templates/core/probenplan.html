@@ -1,6 +1,7 @@
 {% load static %}
 {% load sass_tags %}
 {% load tz %}
+{% load probenplan %}
 
 <!DOCTYPE html>
 <html lang="de">
@@ -12,7 +13,7 @@
   <link href="{% sass_src 'core/custom.scss' %}" rel="stylesheet" type="text/css"/>
   <title>Probenplan des LJO Hamburg (Stand {% now "j.n.Y" %})</title>
 </head>
-<body>
+<body class="{% if black_and_white %}bw{% endif %}">
 <header class="header">
   <div class="title">
     <h1>Probenplan des LJO Hamburg</h1>
@@ -21,7 +22,7 @@
   <img src="https://ljo-hamburg.de/wp-content/uploads/2019/06/ljo-logo-png.png" alt="LJO-Logo" width="240">
 </header>
 <section class="control">
-  <form method="get" action="{% url 'probenplan' %}">
+  <form method="get" action="{% url 'index' %}">
     <input class="button" type="submit" value="Filter anwenden">
     <input type="checkbox" id="all" name="all" {% if all_events %}checked{% endif %}>
     <label class="label-inline" for="all">Vergangene Termine Zeigen</label>
@@ -34,6 +35,11 @@
         {{ to_date|date:'j.m.Y' }}{% endif %}</span>
     {% endif %}
   </form>
+  <div class="legend">
+    <span class="special dot">Dozentenproben</span>
+    <span class="important dot">Generalproben und Konzerte</span>
+    <span class="orga dot">Orga-Termine</span>
+  </div>
 </section>
 <hr/>
 <table class="table">
@@ -54,18 +60,18 @@
   </tr>
   </thead>
   <tbody>
-  {% for day_events in events %}
+  {% for event_list in events %}
     {% ifchanged %}
       <tr class="year-row">
-        <th colspan="4"><h4>Termine in {{ day_events.day|date:'Y' }}</h4></th>
+        <th colspan="4"><h4>Termine in {{ event_list.day|date:'Y' }}</h4></th>
       </tr>
     {% endifchanged %}
-    {% for event in day_events.events %}
-      <tr class="{% if forloop.first %}line {% endif %}{{ event.css_classes|join:' ' }}{% if black_and_white %} bw{% endif %}">
+    {% for event in event_list.events %}
+      <tr class="{% if forloop.first %}line {% endif %} {% extra_classes event %}">
         {% if forloop.first %}
-          <th rowspan="{{ day_events.events|length }}" scope="row" class="date-cell">
+          <th rowspan="{{ event_list.events|length }}" scope="row" class="date-cell">
             <div class="event-date">
-              {{ day_events.day|date:'j. M' }}
+              {{ event_list.day|date:'j. M' }}
             </div>
           </th>
         {% endif %}
@@ -82,7 +88,7 @@
           <div class="event">
             <div class="title">{{ event.title }}</div>
             <small class="location">
-              {{ event.location|safe }}
+              {{ event.location|location }}
             </small>
           </div>
         </td>

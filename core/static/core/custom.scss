@@ -80,6 +80,40 @@ section.control {
   }
 }
 
+.legend {
+  margin-top: 8px;
+
+  body.bw & {
+    display: none;
+  }
+
+  .dot {
+    &:before {
+      content: " ";
+      vertical-align: middle;
+      height: 10px;
+      width: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: #bbb;
+      margin-right: 6px;
+      margin-bottom: 3px;
+    }
+  }
+
+  .special:before {
+    background-color: deepskyblue;
+  }
+
+  .important:before {
+    background-color: salmon;
+  }
+
+  .orga:before {
+    background-color: darkgreen;
+  }
+}
+
 hr {
   margin-top: 0;
 }
@@ -118,7 +152,9 @@ tr {
       page-break-inside: avoid;
     }
   }
+}
 
+body:not(.bw) tr {
   &.secondary td {
     color: #8a8a8a;
     -webkit-print-color-adjust: exact;
@@ -127,16 +163,16 @@ tr {
     }
   }
 
-  &:not(.bw).vorstandssitzung, &:not(.bw).vollversammlung {
-    .title {
-      color: darken(darksalmon, 35%);
-    }
+  &.special .title {
+    color: deepskyblue;
   }
 
-  &:not(.bw).new {
-    .title {
-      color: deepskyblue;
-    }
+  &.important .title {
+    color: salmon;
+  }
+
+  &.orga .title {
+    color: darkgreen;
   }
 }
 
