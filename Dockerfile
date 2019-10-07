@@ -18,12 +18,10 @@ RUN apk update \
     # Configure Crontab
     && mkdir -p /var/log/cron \
 	&& mkdir -m 0644 -p /var/spool/cron/crontabs \
-	&& touch /var/log/cron/cron.log \
 	&& mkdir -m 0644 -p /etc/cron.d \
 	# Configure Cronjobx
 	&& /usr/bin/crontab /code/crontab.txt
 
 EXPOSE 8000
 
-CMD ['/code/entry.sh']
-
+ENTRYPOINT ["/code/entry.sh"]
