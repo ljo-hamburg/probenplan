@@ -1,11 +1,7 @@
-import os
-from urllib.request import urlopen
-
 import arrow
-from django.http import HttpResponse
+from django.core.management import call_command
 from django.shortcuts import render, redirect
 from django.views.decorators.clickjacking import xframe_options_exempt
-from ics import Calendar
 
 from Probenplan import settings
 from core.models import Event
@@ -26,20 +22,7 @@ class EventList:
 # TODO: Auto Reload Mechanism
 @xframe_options_exempt
 def reload(request):
-    url = os.getenv('PROBENPLAN_CALENDAR')
-    calendar = Calendar(urlopen(url).read().decode())
-    Event.objects.all().delete()
-    events = []
-    for entry in calendar.timeline:
-        event = Event()
-        event.title = entry.name
-        event.location = entry.location
-        event.description = entry.description
-        event.begin = entry.begin.to(settings.TIME_ZONE).datetime
-        event.end = entry.end.to(settings.TIME_ZONE).datetime
-        event.all_day = entry.all_day
-        events.append(event)
-    Event.objects.bulk_create(events)
+    call_command('reload')
     return redirect('/')
 
 
