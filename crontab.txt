@@ -1,1 +1,1 @@
-5 * * * * cd /code && python manage.py reload && echo "Reloaded" >> /var/log/cron.log 2>&1
+* * * * * cd /code && python manage.py reload && echo "Reloaded" >> /var/log/cron.log 2>&1
