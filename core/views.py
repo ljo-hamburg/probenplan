@@ -4,30 +4,50 @@ from django.shortcuts import render, redirect
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 from Probenplan import settings
-from core.models import Event
+from core.models import Event, EventColorMapping, EventColorDescription
 
 
 class EventList:
+    """
+    An instance of this class represents a list of events that are associated with a specific date (most commonly a
+    single day).
+    """
     day: arrow
     events: list
 
     @property
     def has_timed_events(self):
+        """
+        Returns a boolean value indicating whether the `EventList` contains events that are not all-day events.
+        """
         for event in self.events:
             if not event.all_day:
                 return True
         return False
 
 
-# TODO: Auto Reload Mechanism
 @xframe_options_exempt
 def reload(request):
+    """
+    Reloads all events from the remote ICS source. This view redirects to the default index view.
+    :param request: The user's request. Currently ignored.
+    :return: Redirects to '/'
+    """
     call_command('reload')
     return redirect('/')
 
 
 @xframe_options_exempt
 def index(request):
+    """
+    Renders the schedule. The following GET arguments are supported:
+    - `all`: If set to true the schedule will contain all past and future events.
+    - `bw`: If set no colors are rendered.
+    - `from`: An earliest date for events to be included.
+    - `to`: A latest date for events to be included.
+    :param request: The user's request.
+    :return: The rendered schedule.
+    """
     all_events = request.GET.get('all', 'false').lower() in ['true', '1', 'yes', 'on']
     black_and_white = request.GET.get('bw', 'false').lower() in ['true', '1', 'yes', 'on']
     from_date = request.GET.get('from', None)
@@ -63,5 +83,6 @@ def index(request):
         'black_and_white': black_and_white,
         'all_events': all_events,
         'today': arrow.now(tz=settings.TIME_ZONE),
-        'events': event_lists
+        'events': event_lists,
+        'color_descriptions': EventColorDescription.objects.order_by('index')
     })

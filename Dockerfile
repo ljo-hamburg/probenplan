@@ -21,7 +21,7 @@ RUN pip install -r requirements.txt \
     && python manage.py compilescss \
     && python manage.py collectstatic \
 	# Configure Cronjobs
-	&& echo '* * * * * cd /code && python manage.py reload >> /var/log/cron.log 2>&1 && echo "Reloaded" >> /var/log/cron.log 2>&1' > /crontab.txt \
+	&& echo '5 * * * * cd /code && python manage.py reload >> /var/log/probenplan-cron.log 2>&1' > /crontab.txt \
 	&& /usr/bin/crontab /crontab.txt \
 	&& rm -f /crontab.txt
 

@@ -2,122 +2,19 @@
  * General Styles
  */
 
+@import "colors";
+@import "controls";
+@import "header";
+
 body {
   @media screen {
     padding: 20px;
   }
-}
-
-@media print {
-  body {
+  @media print {
     color: black;
     font-size: 100% !important;
   }
 }
-
-/**
- * Header
- */
-
-.header {
-  img {
-    width: 240px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  .title {
-    width: calc(100% - 250px);
-    display: inline-block;
-    vertical-align: middle;
-
-    h1 {
-      font-weight: bold;
-      margin-bottom: 0 !important;
-    }
-
-    div {
-      font-size: 1.5em;
-      margin-top: -3.5pt;
-    }
-  }
-}
-
-section.control {
-  padding: 8px;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-  border-radius: 5px;
-
-  .button, form {
-    margin-bottom: 0;
-  }
-
-  form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    * {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  input[type=checkbox] {
-    margin-left: 20px;
-  }
-
-  .fill {
-    flex: 1;
-  }
-
-  span {
-    margin-left: 8px;
-  }
-
-  @media print {
-    display: none;
-  }
-}
-
-.legend {
-  margin-top: 8px;
-
-  body.bw & {
-    display: none;
-  }
-
-  .dot {
-    &:before {
-      content: " ";
-      vertical-align: middle;
-      height: 10px;
-      width: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      background-color: #bbb;
-      margin-right: 6px;
-      margin-bottom: 3px;
-    }
-  }
-
-  .special:before {
-    background-color: deepskyblue;
-  }
-
-  .important:before {
-    background-color: salmon;
-  }
-
-  .orga:before {
-    background-color: darkgreen;
-  }
-}
-
-hr {
-  margin-top: 0;
-}
-
 
 /**
  * Main Table
@@ -161,18 +58,6 @@ body:not(.bw) tr {
     @media print {
       color: gray;
     }
-  }
-
-  &.special .title {
-    color: deepskyblue;
-  }
-
-  &.important .title {
-    color: salmon;
-  }
-
-  &.orga .title {
-    color: darkgreen;
   }
 }
 

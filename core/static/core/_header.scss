@@ -1,0 +1,40 @@
+
+/**
+ * Header
+ */
+
+.header {
+  img {
+    width: 240px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .title {
+    width: calc(100% - 250px);
+    display: inline-block;
+    vertical-align: middle;
+
+    h1 {
+      font-weight: bold;
+      margin-bottom: 0 !important;
+    }
+
+    div {
+      font-size: 1.5em;
+      margin-top: -3.5pt;
+    }
+  }
+}
+
+.legend {
+  margin-top: 8px;
+
+  body.bw & {
+    display: none;
+  }
+}
+
+hr {
+  margin-top: 0;
+}

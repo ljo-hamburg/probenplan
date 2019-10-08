@@ -9,7 +9,8 @@ from core.models import Event
 
 
 class Command(BaseCommand):
-    help = 'Reloads data for the Schedule'
+    help = 'Reloads data for the Schedule from the remote source specified in the environment variable ' \
+           '$PROBENPLAN_CALENDAR'
 
     def add_arguments(self, parser):
         pass
