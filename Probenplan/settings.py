@@ -12,6 +12,16 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+def docker_env(key: str, default = None):
+    if key in os.environ:
+        return os.environ[key]
+    if f"{key}_FILE" in os.environ:
+        with open(f"{key}_FILE", "r") as file:
+            return file.read()
+    if default:
+        return default
+    raise KeyError(f"Environment variable {key} is not defined.")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,12 +29,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dz491yzqgwpdaei!053hq$)%a(u25aq#l6eg6hcvjwbli*$f96'
+SECRET_KEY = docker_env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['probenplan.webserver.ljo-hamburg.de', 'probenplan.ljo-hamburg.de', '127.0.0.1']
+ALLOWED_HOSTS = [ host.strip() for host in docker_env("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(',') ]
 
 # Application definition
 
@@ -50,9 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CORS_ORIGIN_WHITELIST = [
-    "https://ljo-hamburg.de"
-]
+CORS_ORIGIN_WHITELIST = [ origin.strip() for origin in docker_env("CORS_ORIGIN_WHITELIST", "").split(",") ]
 
 ROOT_URLCONF = 'Probenplan.urls'
 
@@ -81,7 +89,7 @@ WSGI_APPLICATION = 'Probenplan.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': docker_env("SQLITE_LOCATION", os.path.join(BASE_DIR, 'db.sqlite3')),
     }
 }
 
@@ -106,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = docker_env("DJANGO_LANGUAGE_CODE", "de-de")
 
-TIME_ZONE = 'Europe/Berlin'
+TIME_ZONE = docker_env("TIMEZONE", 'Europe/Berlin')
 
 USE_I18N = True
 
