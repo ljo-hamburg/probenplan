@@ -18,7 +18,7 @@ def docker_env(key: str, default = None):
     if f"{key}_FILE" in os.environ:
         with open(f"{key}_FILE", "r") as file:
             return file.read()
-    if default:
+    if default is not None:
         return default
     raise KeyError(f"Environment variable {key} is not defined.")
 

@@ -19,9 +19,6 @@ RUN pip install -r requirements.txt
 
 COPY . /code/
 RUN mkdir static \
-    && python manage.py migrate \
-    && python manage.py compilescss \
-    && python manage.py collectstatic \
 	# Configure Cronjobs
 	&& echo '5 * * * * cd /code && python manage.py reload >> /var/log/probenplan-cron.log 2>&1' > /crontab.txt \
 	&& /usr/bin/crontab /crontab.txt \
