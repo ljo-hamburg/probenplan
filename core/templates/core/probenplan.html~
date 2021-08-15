@@ -67,7 +67,7 @@
           </div>
         </td>
         <td class="description-cell">
-          <div class="event-description">{{ event | details | safe }}</div>
+          <div class="event-description">{{ event.description }}</div>
         </td>
       </tr>
     {% endfor %}

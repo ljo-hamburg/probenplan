@@ -24,9 +24,9 @@ class Command(BaseCommand):
         events = []
         for entry in calendar.timeline:
             event = Event()
-            event.title = entry.name
-            event.location = entry.location
-            event.description = entry.description
+            event.title = entry.name or ""
+            event.location = entry.location or ""
+            event.description = entry.description or ""
             event.begin = entry.begin.to(settings.TIME_ZONE).datetime
             event.end = entry.end.to(settings.TIME_ZONE).datetime
             event.all_day = entry.all_day

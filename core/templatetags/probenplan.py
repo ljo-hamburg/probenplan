@@ -43,3 +43,35 @@ def colors_tags_for_event(event):
                 or not mapping.case_sensitive and re.search(mapping.regex, event.title):
             tags.add(mapping.color.color)
     return tags
+
+@register.filter(name='details', is_safe=True)
+def render_teams(event):
+    """
+    Returns a formatted string that can be safely displayed when the description contains an MS Teams Meeting.
+    """
+    parts = re.split("_{10,}", event.description)
+    cleaned_parts = []
+    for part in parts:
+        if part.strip() == "":
+            continue
+        if part.strip().startswith("Microsoft Teams-Besprechung"):
+            match = re.search("<(https://teams.microsoft.com/l/meetup-join/.+)>", part)
+            if match:
+                link = match[1]
+                part = f"""
+                    Microsoft Teams-Meeting<br />
+                    Am Computer oder über mobile App teilnehmen.<br />
+                    <a href="{link}" target="_blank">Hier klicken, um der Besprechung beizutreten</a> &VerticalLine; <a href="https://aka.ms/JoinTeamsMeeting" target="_blank">Weitere Infos</a>
+                """
+            else:
+                part = "No Match"
+        else:
+            # Match URLs
+            p = re.compile('''[^<">]((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)[^< ,"'>]''', re.MULTILINE)
+
+            for item in re.finditer(p, part):
+                result = item.group(0)
+                result = result.replace(' ', '')
+                part = part.replace(result, '<a href="' + result + '">' + result + '</a>')
+        cleaned_parts.append(part)
+    return "<hr>".join(cleaned_parts)

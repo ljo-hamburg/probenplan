@@ -14,9 +14,11 @@ RUN apk update \
 	&& mkdir /code
 
 WORKDIR /code
+COPY requirements.txt /code/
+RUN pip install -r requirements.txt
+
 COPY . /code/
-RUN pip install -r requirements.txt \
-    && mkdir static \
+RUN mkdir static \
     && python manage.py migrate \
     && python manage.py compilescss \
     && python manage.py collectstatic \
