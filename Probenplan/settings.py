@@ -16,7 +16,7 @@ def docker_env(key: str, default = None):
     if key in os.environ:
         return os.environ[key]
     if f"{key}_FILE" in os.environ:
-        with open(f"{key}_FILE", "r") as file:
+        with open(os.environ[f"{key}_FILE"], "r") as file:
             return file.read()
     if default is not None:
         return default
