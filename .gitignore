@@ -2,7 +2,7 @@
 .DS_Store
 
 # Generated Files
-karaoke/static/
+probenplan/static/
 
 # ---> Python
 # Byte-compiled / optimized / DLL files
@@ -75,4 +75,4 @@ webpack-stats.json
 # Static Artwork Files
 media/
 venv/
-/static
+/probenplan/styles

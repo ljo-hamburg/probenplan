@@ -1,7 +1,7 @@
 <header class="header">
   <div class="title">
     <h1>Probenplan des LJO Hamburg</h1>
-    <div>Stand vom {% now "j.n.Y" %}</div>
+    <div>Stand vom {{ now | datetime("DD.MM.YYYY") }}</div>
   </div>
   <a href="https://ljo-hamburg.de">
     <img src="https://cdn.lmr-hh.de/logos/ljohh-quer.png" alt="LJO-Logo" width="240">

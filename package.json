@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "get-google-fonts": "^1.2.2",
+    "milligram": "^1.4.1",
+    "normalize.css": "^8.0.1",
+    "sass": "^1.53.0"
+  },
+  "scripts": {
+    "build": "npm run css && npm run fonts",
+    "precss": "mkdir -p probenplan/static",
+    "css": "sass --load-path=node_modules --style=compressed probenplan/styles/probenplan.scss probenplan/static/probenplan.css",
+    "prefonts": "mkdir -p probenplan/static",
+    "fonts": "get-google-fonts --input 'https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic' --output probenplan/static --overwriting",
+    "clean": "rm probenplan/static/*"
+  }
+}

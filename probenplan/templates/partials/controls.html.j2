@@ -1,0 +1,14 @@
+<section class="control">
+  <form method="get" action="{{ url_for('probenplan') }}">
+    <input class="button" type="submit" value="Filter anwenden">
+    <input type="checkbox" id="all" name="all" {% if all_events %}checked{% endif %}>
+    <label class="label-inline" for="all">Vergangene Termine Zeigen</label>
+  </form>
+  <div class="legend">
+    {% for highlight in highlights %}
+      <span class="custom-color-{{ loop.index - 1 }} dot">{{ highlight.name }}</span>
+    {% endfor %}
+    <br/><small>Um die Farben mit auszudrucken, muss beim Drucken 'Hintergrund drucken'
+    ausgewählt werden.</small>
+  </div>
+</section>
