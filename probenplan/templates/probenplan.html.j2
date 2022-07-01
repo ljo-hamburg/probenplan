@@ -31,7 +31,7 @@
       <tr class="heading-row line">
         <th colspan="4">
           <h4>{{ event.probenplan.heading }}</h4>
-          <div>{{ (event.description or "") | markdown | safe }}</div>
+          <div class="description">{{ (event.description or "") | markdown | safe }}</div>
         </th>
       </tr>
     {% endif %}
