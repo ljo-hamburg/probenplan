@@ -71,8 +71,3 @@ target/
 # Node.js
 node_modules/
 webpack-stats.json
-
-# Static Artwork Files
-media/
-venv/
-/probenplan/styles
