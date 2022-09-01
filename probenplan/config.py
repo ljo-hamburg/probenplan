@@ -5,11 +5,24 @@ This module provides an interface to inject configuration via the environment.
 import os
 import re
 
-tenant = os.getenv("AZURE_TENANT")
-client_id = os.getenv("AZURE_CLIENT_ID")
-client_secret = os.getenv("AZURE_CLIENT_SECRET")
-calendar_user = os.getenv("CALENDAR_USER")
-locale = os.getenv("LOCALE", "de-de")
+
+def read_env(key, default=None, required=True):
+    if key in os.environ:
+        return os.getenv(key)
+    elif f"{key}_FILE" in os.environ:
+        with open(os.environ[key + "_FILE"], "r") as f:
+            return f.read().strip()
+    elif required and default is None:
+        raise KeyError(f"{key} or {key}_FILE is required in the environment.")
+    else:
+        return default
+
+
+tenant = read_env("AZURE_TENANT")
+client_id = read_env("AZURE_CLIENT_ID")
+client_secret = read_env("AZURE_CLIENT_SECRET")
+calendar_user = read_env("CALENDAR_USER")
+locale = read_env("LOCALE", "de-de")
 
 highlights = []
 __index = 1
@@ -26,10 +39,3 @@ try:
         __index += 1
 except KeyError:
     pass
-
-if not tenant:
-    raise KeyError("AZURE_TENANT is required.")
-if not client_id:
-    raise KeyError("AZURE_CLIENT_ID is required.")
-if not client_secret:
-    raise KeyError("AZURE_CLIENT_SECRET is required.")
