@@ -63,22 +63,23 @@ def get_events(begin: Arrow | None, end: Arrow | None) -> Iterable[Event]:
         return
     first = Event(first)
 
-    heading = next(
-        graph.get_list(
-            f"users/{config.calendar_user}/calendar/events",
-            params={
-                "$filter": (
-                    f"startsWith(subject, '--') and "
-                    f"start/dateTime le '{first.start.isoformat()}'"
-                ),
-                "$orderBy": "start/dateTime desc",
-                "$top": 1,
-            },
-        ),
-        None,
-    )
-    if heading:
-        yield Event(heading)
+    if not first.is_heading:
+        heading = next(
+            graph.get_list(
+                f"users/{config.calendar_user}/calendar/events",
+                params={
+                    "$filter": (
+                        f"startsWith(subject, '--') and "
+                        f"start/dateTime le '{first.start.isoformat()}'"
+                    ),
+                    "$orderBy": "start/dateTime desc",
+                    "$top": 1,
+                },
+            ),
+            None,
+        )
+        if heading:
+            yield Event(heading)
     yield first
     for event in events:
         yield Event(event)

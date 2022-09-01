@@ -10,26 +10,24 @@ This is the Probenplan app of the LJO Hamburg.
 The quickest way to get up and running is by using the docker container:
 
 ```shell
-docker run -p 8080:8080 -e PROBENPLAN_CALENDAR="https://..." ghcr.io/ljo-hamburg/probenplan
+docker run -p 8080:8080 -e AZURE_TENANT="..." -e ... ghcr.io/ljo-hamburg/probenplan
 ```
 
 The following environment variables are supported:
 
 | Environment Variable  | Required | Description                                                  |
 | --------------------- | -------- | ------------------------------------------------------------ |
-| `PROBENPLAN_CALENDAR` | yes      | This variable sets the source of the calendar data. The probenplan will query this calendar for events to be displayed. |
-| `CACHE_TTL`           | no       | The number of seconds the calendar data is cached for. Default is 3600. |
-| `LOCALE`              | no       | The display locale/language. Default is `de-de`.             |
-| `HEADING_PATTERN`     | no       | A regular expression that identifies events that are interpreted as headings. See below for details. Default: `^--(?P<value>.+)--$` |
+| `AZURE_TENANT`        | yes      | The ID of the Azure Tenant from which data will be fetched.  |
+| `AZURE_CLINET_ID`     | yes      | The client ID for the application. Needs read permissions for the selected calendar. |
+| `AZURE_CLIENT_SECRET` | yes      | The client secret for the application.                       |
+| `CALENDAR_USER`       | yes      | The ID or UPN of the user whose primary calendar will be used as data source. |
 | `HIGHLIGHT_…`         | no       | See below.                                                   |
 
 ### Headings
 
-Some events get treated in a special way by the calendar. These are called _heading events_. They are identified by a regular expression `HEADING_PATTERN` that is matched with the title of an event. If the title of an event matches this expression, the event will be treated as a heading and will be excluded from the regular event list.
+Some events get treated in a special way by the calendar. These are called _heading events_. They are identified by a leading double dash `--` in the subject of an event. Such events will be treated as headings and are otherwise excluded from the event list.
 
-The pattern may include a named capture group `value`. If an event’s title matches the expression the value of this capture group is used as the heading value. If no such capture group exists the full match is used as the heading.
-
-The regular expression may match only part of an event’s title. Use `^` and `$` to match the full title. The match is case insensitive.
+Headings may be found outside of the queried date range (specified via GET paramters `from` and `to`) to be able to display a heading above the first event.
 
 ### Highlights
 
