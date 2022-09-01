@@ -25,20 +25,19 @@
   </tr>
   </thead>
   <tbody>
-  {% for day, event_list in (events|group_by_day).items() %}
-    {% if (headings|length) > 0 and day >= headings[0].begin %}
-      {% set event = headings.pop(0) %}
+  {% for day, (day_events, headings) in (events|group_by_day).items() %}
+    {% for event in headings %}
       <tr class="heading-row line">
         <th colspan="4">
-          <h4>{{ event.probenplan.heading }}</h4>
-          <div class="description">{{ (event.description or "") | markdown | safe }}</div>
+          <h4>{{ event.heading }}</h4>
+          <div class="description">{{ event.description | markdown | safe }}</div>
         </th>
       </tr>
-    {% endif %}
-    {% for event in event_list %}
+    {% endfor %}
+    {% for event in day_events %}
       <tr class="{% if loop.first %}line {% endif %}">
         {% if loop.first %}
-          <th rowspan="{{ event_list | length }}" scope="row" class="date-cell">
+          <th rowspan="{{ day_events | length }}" scope="row" class="date-cell">
             <div class="event-date">
               {{ day | datetime('D. MMM') }}
             </div>
@@ -50,17 +49,17 @@
           </td>
         {% else %}
           <td class="time-cell">
-            <div class="event-time">{{ event.begin | datetime('HH:mm') }} –
+            <div class="event-time">{{ event.start | datetime('HH:mm') }} –
               {{ event.end | datetime('HH:mm') }}</div>
           </td>
         {% endif %}
         <td valign="middle" class="event-cell">
           <div class="event">
             <div class="title">
-              {% for color in event.probenplan.colors %}
+              {% for color in event.colors %}
                 <span class="custom-color-{{ color }} dot"></span>
               {% endfor %}
-              {{ event.name }}
+              {{ event.subject }}
             </div>
             <small class="location">
               {{ event | location | safe }}
@@ -68,7 +67,7 @@
           </div>
         </td>
         <td class="description-cell">
-          <div class="event-description">{{ (event.description or "") | markdown | safe }}</div>
+          <div class="event-description">{{ event | description }}</div>
         </td>
       </tr>
     {% endfor %}

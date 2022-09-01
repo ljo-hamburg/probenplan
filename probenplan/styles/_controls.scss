@@ -1,44 +1,24 @@
 section.control {
+  margin-top: 8px;
+
   @media screen {
     padding: 8px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
     border-radius: 5px;
   }
 
-  small {
-    @media print {
-      display: none;
-    }
+  span.dot:not(:first-child) {
+    margin-left: 8px;
   }
 
-  .button, form {
+  p:last-child {
     margin-bottom: 0;
   }
 
-  form {
-    @media print {
+  @media print {
+    .print-info {
       display: none;
     }
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    * {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  input[type=checkbox] {
-    margin-left: 20px;
-  }
-
-  .fill {
-    flex: 1;
-  }
-
-  span {
-    margin-left: 8px;
   }
 }
 
