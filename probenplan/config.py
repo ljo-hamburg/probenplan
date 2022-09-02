@@ -23,6 +23,7 @@ client_id = read_env("AZURE_CLIENT_ID")
 client_secret = read_env("AZURE_CLIENT_SECRET")
 calendar_user = read_env("CALENDAR_USER")
 locale = read_env("LOCALE", "de-de")
+timezone = read_env("TZ", "Europe/Berlin")
 
 highlights = []
 __index = 1

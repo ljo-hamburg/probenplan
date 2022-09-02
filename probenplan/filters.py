@@ -51,7 +51,10 @@ def group_by_day(
 
 @app.template_filter()
 def datetime(
-    value: Arrow, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = None
+    value: Arrow,
+    fmt: str = "YYYY-MM-DD HH:mm:ssZZ",
+    locale: str = None,
+    timezone: str = None,
 ) -> str:
     """
     Formats the datetime `value` with the specified `fmt` format string.
@@ -59,8 +62,11 @@ def datetime(
     :param value: The datetime value to be formatted.
     :param fmt: The format string used for formatting.
     :param locale: The locale used for formatting.
+    :param timezone: The timezone in which to display the date.
     """
-    return value.format(fmt, locale=locale or config.locale)
+    return value.to(timezone or config.timezone).format(
+        fmt, locale=locale or config.locale
+    )
 
 
 @app.template_filter()
