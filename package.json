@@ -3,7 +3,7 @@
     "get-google-fonts": "^1.2.2",
     "milligram": "^1.4.1",
     "normalize.css": "^8.0.1",
-    "sass": "^1.58.0"
+    "sass": "^1.58.1"
   },
   "scripts": {
     "build": "npm run css && npm run fonts",
