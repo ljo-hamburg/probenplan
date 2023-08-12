@@ -30,7 +30,7 @@
       <tr class="heading-row line">
         <th colspan="4">
           <h4>{{ event.heading }}</h4>
-          <div class="description">{{ event.description | markdown | safe }}</div>
+          <div class="description">{{ event | description }}</div>
         </th>
       </tr>
     {% endfor %}

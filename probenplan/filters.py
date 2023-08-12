@@ -9,6 +9,7 @@ from typing import Dict, Iterable, List, Tuple
 from urllib.parse import urlencode
 
 from arrow import Arrow
+from bs4 import BeautifulSoup
 from markdown import markdown as md
 
 from . import config
@@ -139,7 +140,9 @@ Teilnahme, wenn man sich die <a target="_blank"
 href="https://www.microsoft.com/de-de/microsoft-teams/download-app">Teams-App
 herunterlädt</a>. Eine Teilnahme über den Browser ist aber auch möglich.</p></small>
                         """
-    desc += md(event.description).strip()
+
+    soup = BeautifulSoup(event.description)
+    desc += str(soup.select_one("body"))
     return desc
 
 

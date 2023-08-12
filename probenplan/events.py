@@ -11,7 +11,9 @@ from .graph import session as graph
 class Event:
     def __init__(self, data: dict):
         self.subject: str = data.get("subject", "")
-        self.description: str = data.get("bodyPreview", "")
+        self.description_preview: str = data.get("bodyPreview", "")
+        self.description = data.get("body", {}).get("content", "")
+        self.content_type = data.get("body", {}).get("contentType", "")
         start = data.get("start", {}).get("dateTime")
         self.start: Arrow | None = arrow.get(start) if start else None
         end = data.get("end", {}).get("dateTime")
