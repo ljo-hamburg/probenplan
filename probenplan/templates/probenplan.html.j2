@@ -39,7 +39,7 @@
         {% if loop.first %}
           <th rowspan="{{ day_events | length }}" scope="row" class="date-cell">
             <div class="event-date">
-              {{ day | datetime('D. MMM') }}
+              {{ day | datetime('ddd. DD. MMM') }}
             </div>
           </th>
         {% endif %}
