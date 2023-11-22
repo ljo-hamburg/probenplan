@@ -18,7 +18,7 @@ The following environment variables are supported:
 | Environment Variable  | Required | Description                                                  |
 | --------------------- | -------- | ------------------------------------------------------------ |
 | `AZURE_TENANT`        | yes      | The ID of the Azure Tenant from which data will be fetched.  |
-| `AZURE_CLINET_ID`     | yes      | The client ID for the application. Needs read permissions for the selected calendar. |
+| `AZURE_CLIENT_ID`     | yes      | The client ID for the application. Needs read permissions for the selected calendar. |
 | `AZURE_CLIENT_SECRET` | yes      | The client secret for the application.                       |
 | `CALENDAR_USER`       | yes      | The ID or UPN of the user whose primary calendar will be used as data source. |
 | `HIGHLIGHT_…`         | no       | See below.                                                   |
