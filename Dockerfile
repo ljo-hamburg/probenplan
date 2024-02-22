@@ -1,4 +1,4 @@
-FROM node:alpine AS static-builder
+FROM node:21-alpine AS static-builder
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY ./probenplan/styles ./probenplan/styles
 RUN npm run build
 
 
-FROM python:alpine
+FROM python:3.12-alpine
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
