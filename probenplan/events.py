@@ -1,17 +1,27 @@
+import re
 from functools import cached_property
 from typing import Iterable
 
 import arrow
 from arrow import Arrow
+import html2text
 
 from . import config
 from .graph import session as graph
 
 
+# These regexes contain the required number of capture groups but will never match anything.
+html2text.config.RE_MD_DOT_MATCHER = re.compile("$()()^")
+html2text.config.RE_MD_PLUS_MATCHER = re.compile("$()()^")
+html2text.config.RE_MD_DASH_MATCHER = re.compile("$()()^")
+html2text.config.RE_MD_BACKSLASH_MATCHER = re.compile("$()^")
+text_maker = html2text.HTML2Text()
+
 class Event:
     def __init__(self, data: dict):
         self.subject: str = data.get("subject", "")
-        self.description: str = data.get("bodyPreview", "")
+        # self.description: str = data.get("bodyPreview", "")
+        self.description: str = text_maker.handle(data.get("body", {}).get("content", ""))
         start = data.get("start", {}).get("dateTime")
         self.start: Arrow | None = arrow.get(start) if start else None
         end = data.get("end", {}).get("dateTime")

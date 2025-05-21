@@ -68,6 +68,7 @@ body:not(.bw) tr {
     top: 0;
     background-color: white;
     border-bottom: 0.4rem solid #e1e1e1;
+    z-index: 1000;
   }
 
   h4 {
