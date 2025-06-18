@@ -139,6 +139,11 @@ Teilnahme, wenn man sich die <a target="_blank"
 href="https://www.microsoft.com/de-de/microsoft-teams/download-app">Teams-App
 herunterlädt</a>. Eine Teilnahme über den Browser ist aber auch möglich.</p></small>
                         """
+        index = event.description.rfind("________________________________________________________________________________")
+        if index > 0:
+            index = event.description.rfind("________________________________________________________________________________", 0, index)
+        if index > 0:
+            event.description = event.description[:index]
     desc += md(event.description).strip()
     return desc
 
