@@ -146,6 +146,15 @@ body:not(.bw) tr {
   padding: 0 1.5rem;
 }
 
+ol, ul {
+  margin-left: 28px;
+  list-style-position: outside;
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+}
+
 // Dots
 .dot {
   body.bw & {
